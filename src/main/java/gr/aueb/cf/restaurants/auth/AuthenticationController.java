@@ -3,7 +3,6 @@ package gr.aueb.cf.restaurants.auth;
 import gr.aueb.cf.restaurants.dto.RegisterUserDTO;
 import gr.aueb.cf.restaurants.validator.UserRegisterValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,7 +19,7 @@ public class AuthenticationController {
     private final UserRegisterValidator userRegisterValidator;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, UserRegisterValidator userRegisterValidator, Environment env) {
+    public AuthenticationController(AuthenticationService authenticationService, UserRegisterValidator userRegisterValidator) {
         this.authenticationService = authenticationService;
         this.userRegisterValidator = userRegisterValidator;
     }
