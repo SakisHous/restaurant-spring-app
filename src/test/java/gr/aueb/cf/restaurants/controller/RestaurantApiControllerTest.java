@@ -2,6 +2,7 @@ package gr.aueb.cf.restaurants.controller;
 
 import gr.aueb.cf.restaurants.model.Restaurant;
 import gr.aueb.cf.restaurants.service.IRestaurantService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,31 +25,22 @@ class RestaurantApiControllerTest {
     @MockBean
     IRestaurantService restaurantService;
 
+    @BeforeEach
+    void setUp() {
+
+    }
+
     @Test
     void getRestaurant() throws Exception {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(1L);
+
+        // mock restaurantService behaviour
         given(restaurantService.getRestaurantById(any())).willReturn(restaurant);
 
-        mockMvc.perform(get("/api/restaurants/{id}", restaurant.getRestaurantId()).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/restaurants/{id}", restaurant.getRestaurantId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(restaurant.getRestaurantId())));
-    }
-
-    @Test
-    void getRestaurantsInCity() {
-    }
-
-    @Test
-    void addRestaurant() {
-    }
-
-    @Test
-    void updateRestaurant() {
-    }
-
-    @Test
-    void deleteRestaurant() {
     }
 }
