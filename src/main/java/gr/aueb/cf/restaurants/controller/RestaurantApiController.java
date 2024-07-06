@@ -45,7 +45,7 @@ public class RestaurantApiController {
     public ResponseEntity<List<RestaurantReadOnlyDTO>> getRestaurantsInCity(@PathParam("city") String city) {
         List<Restaurant> restaurants = restaurantService.getRestaurantByCity(city);
 
-        if (restaurants.size() == 0) {
+        if (restaurants.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<RestaurantReadOnlyDTO> restaurantsReadOnlyDto = new ArrayList<>();

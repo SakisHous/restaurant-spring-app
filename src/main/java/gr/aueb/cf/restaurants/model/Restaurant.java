@@ -1,11 +1,18 @@
 package gr.aueb.cf.restaurants.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "RESTAURANT")
 public class Restaurant {
@@ -39,76 +46,4 @@ public class Restaurant {
     @OneToMany(mappedBy = "restaurant")
     @JsonIgnore
     private List<Review> reviews;
-
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-        this.reservations = reservations;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getOpenHour() {
-        return openHour;
-    }
-
-    public void setOpenHour(String openHour) {
-        this.openHour = openHour;
-    }
-
-    public String getCloseHour() {
-        return closeHour;
-    }
-
-    public void setCloseHour(String closeHour) {
-        this.closeHour = closeHour;
-    }
-
-    public String getMenuDescription() {
-        return menuDescription;
-    }
-
-    public void setMenuDescription(String menuDescription) {
-        this.menuDescription = menuDescription;
-    }
 }
