@@ -5,8 +5,8 @@ import gr.aueb.cf.restaurants.dto.RestaurantUpdateDTO;
 import gr.aueb.cf.restaurants.model.Restaurant;
 import gr.aueb.cf.restaurants.repository.RestaurantRepository;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,14 +20,10 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RestaurantServiceImpl implements IRestaurantService {
 
     private final RestaurantRepository restaurantRepository;
-
-    @Autowired
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
-        this.restaurantRepository = restaurantRepository;
-    }
 
     /**
      * This method inserts a new {@link Restaurant} entity in the database.

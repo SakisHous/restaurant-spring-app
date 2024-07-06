@@ -2,7 +2,7 @@ package gr.aueb.cf.restaurants.auth;
 
 import gr.aueb.cf.restaurants.dto.RegisterUserDTO;
 import gr.aueb.cf.restaurants.validator.UserRegisterValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,16 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@AllArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
     private final UserRegisterValidator userRegisterValidator;
-
-    @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, UserRegisterValidator userRegisterValidator) {
-        this.authenticationService = authenticationService;
-        this.userRegisterValidator = userRegisterValidator;
-    }
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(

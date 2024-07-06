@@ -2,6 +2,7 @@ package gr.aueb.cf.restaurants.validator;
 
 import gr.aueb.cf.restaurants.dto.RegisterUserDTO;
 import gr.aueb.cf.restaurants.service.IUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -10,13 +11,10 @@ import org.springframework.validation.Validator;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class UserRegisterValidator implements Validator {
 
     private final IUserService userService;
-
-    public UserRegisterValidator(IUserService userService) {
-        this.userService = userService;
-    }
 
     @Override
     public boolean supports(Class<?> clazz) {

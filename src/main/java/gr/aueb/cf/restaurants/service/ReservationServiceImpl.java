@@ -9,8 +9,8 @@ import gr.aueb.cf.restaurants.repository.ReservationRepository;
 import gr.aueb.cf.restaurants.repository.RestaurantRepository;
 import gr.aueb.cf.restaurants.repository.UserRepository;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,18 +24,12 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ReservationServiceImpl implements IReservationService {
 
     private final ReservationRepository reservationRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public ReservationServiceImpl(ReservationRepository reservationRepository, RestaurantRepository restaurantRepository, UserRepository userRepository) {
-        this.reservationRepository = reservationRepository;
-        this.restaurantRepository = restaurantRepository;
-        this.userRepository = userRepository;
-    }
 
     /**
      * This method inserts a new {@link Reservation} entity in the database.

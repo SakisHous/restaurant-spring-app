@@ -7,8 +7,8 @@ import gr.aueb.cf.restaurants.model.User;
 import gr.aueb.cf.restaurants.repository.RestaurantRepository;
 import gr.aueb.cf.restaurants.repository.ReviewRepository;
 import gr.aueb.cf.restaurants.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,18 +20,12 @@ import java.util.Optional;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ReviewServiceImpl implements IReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
-
-    @Autowired
-    public ReviewServiceImpl(ReviewRepository reviewRepository, UserRepository userRepository, RestaurantRepository restaurantRepository) {
-        this.reviewRepository = reviewRepository;
-        this.userRepository = userRepository;
-        this.restaurantRepository = restaurantRepository;
-    }
 
     /**
      * This method inserts a new {@link Review} entity in the database.

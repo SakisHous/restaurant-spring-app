@@ -4,7 +4,7 @@ import gr.aueb.cf.restaurants.dto.ReviewInsertDTO;
 import gr.aueb.cf.restaurants.dto.ReviewReadOnlyDTO;
 import gr.aueb.cf.restaurants.model.Review;
 import gr.aueb.cf.restaurants.service.IReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,14 +18,10 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ReviewApiController {
 
     private final IReviewService reviewService;
-
-    @Autowired
-    public ReviewApiController(IReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
 
     @PostMapping("/restaurants/{id}/review")
     public ResponseEntity<ReviewReadOnlyDTO> insertReview(@PathVariable("id") Long id, @RequestBody ReviewInsertDTO dto) {

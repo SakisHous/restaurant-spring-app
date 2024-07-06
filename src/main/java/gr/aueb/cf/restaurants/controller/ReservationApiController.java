@@ -6,7 +6,7 @@ import gr.aueb.cf.restaurants.dto.ReservationReadOnlyDTO;
 import gr.aueb.cf.restaurants.model.Reservation;
 import gr.aueb.cf.restaurants.service.IReservationService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,14 +22,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class ReservationApiController {
 
     private final IReservationService reservationService;
-
-    @Autowired
-    public ReservationApiController(IReservationService reservationService) {
-        this.reservationService = reservationService;
-    }
 
     @GetMapping(path = "/reservations")
     public ResponseEntity<List<ReservationReadOnlyDTO>> getReservations() {

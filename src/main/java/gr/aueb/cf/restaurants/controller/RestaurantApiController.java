@@ -6,7 +6,7 @@ import gr.aueb.cf.restaurants.dto.RestaurantUpdateDTO;
 import gr.aueb.cf.restaurants.model.Restaurant;
 import gr.aueb.cf.restaurants.service.IRestaurantService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,14 +21,10 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class RestaurantApiController {
 
     private final IRestaurantService restaurantService;
-
-    @Autowired
-    public RestaurantApiController(IRestaurantService restaurantService) {
-        this.restaurantService = restaurantService;
-    }
 
     @GetMapping("/restaurants/{id}")
     public ResponseEntity<RestaurantReadOnlyDTO> getRestaurant(@PathVariable("id") Long restaurantId) {
