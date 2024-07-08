@@ -12,8 +12,8 @@ import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,14 +41,14 @@ public class ReservationServiceImpl implements IReservationService {
     @Transactional
     @Override
     public Reservation insertReservation(ReservationInsertDTO dto) throws Exception {
-        Reservation reservation = null;
+        Reservation reservation;
         try {
             reservation = reservationRepository.save(convertTo(dto));
             if (reservation.getReservationId() == null) {
                 throw new Exception("[Error]: Inserting new reservation");
             }
         } catch (Exception e) {
-            log.info("[Error]: Inserting new reservation\n" + e.getMessage());
+            log.info("[Error]: Inserting new reservation\n{}", e.getMessage());
             throw e;
         }
 
@@ -69,7 +69,7 @@ public class ReservationServiceImpl implements IReservationService {
 
         try {
             reservations = reservationRepository.getReservationsByUser(username);
-            if (reservations.size() == 0) {
+            if (reservations.isEmpty()) {
                 throw new EntityNotFoundException(Reservation.class, 0L);
             }
         } catch (EntityNotFoundException e) {

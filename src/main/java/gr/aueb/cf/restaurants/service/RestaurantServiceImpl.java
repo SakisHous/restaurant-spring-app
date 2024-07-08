@@ -8,8 +8,8 @@ import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +71,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
             updatedRestaurant = restaurantRepository.save(convertFromUpdateDto(dto));
 
         } catch (EntityNotFoundException e) {
-            log.info("[Error]: Updating restaurant\n" + e.getMessage());
+            log.info("[Error]: Updating restaurant\n{}", e.getMessage());
             throw e;
         }
         return updatedRestaurant;
@@ -97,7 +97,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
             }
             restaurantRepository.deleteById(id);
         } catch (EntityNotFoundException e) {
-            log.info("[Error]: Deleting restaurant with id= " + id + "\n" + e.getMessage());
+            log.info("[Error]: Deleting restaurant with id= {}\n{}", id, e.getMessage());
             throw e;
         }
         return restaurant;
@@ -115,7 +115,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
         try {
             restaurant = restaurantRepository.getRestaurantByRestaurantId(id);
         } catch (Exception e) {
-            log.info("[Error]: Retrieving restaurant by id\n" + e.getMessage());
+            log.info("[Error]: Retrieving restaurant by id\n{}", e.getMessage());
         }
         return restaurant;
     }
@@ -134,7 +134,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
         try {
             restaurants = restaurantRepository.getRestaurantByCityName(city);
         } catch (Exception e) {
-            log.info("[Error]: Retrieving restaurant by id\n" + e.getMessage());
+            log.info("[Error]: Retrieving the list of restaurants\n{}", e.getMessage());
         }
         return restaurants;
     }

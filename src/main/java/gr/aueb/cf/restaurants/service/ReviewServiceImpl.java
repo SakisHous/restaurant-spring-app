@@ -10,8 +10,8 @@ import gr.aueb.cf.restaurants.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 /**
@@ -46,7 +46,7 @@ public class ReviewServiceImpl implements IReviewService {
                 throw new Exception("[Error]: Inserting Review");
             }
         } catch (Exception e) {
-            log.info("[Error]: Inserting Review\n" + e.getMessage());
+            log.info("[Error]: Inserting Review\n{}", e.getMessage());
             throw e;
         }
         return review;
