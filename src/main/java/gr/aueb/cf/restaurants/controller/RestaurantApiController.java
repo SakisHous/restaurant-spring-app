@@ -1,8 +1,10 @@
 package gr.aueb.cf.restaurants.controller;
 
 import gr.aueb.cf.restaurants.dto.RestaurantInsertDTO;
-import gr.aueb.cf.restaurants.dto.RestaurantReadOnlyDTO;
+import gr.aueb.cf.restaurants.dto.RestaurantResponseDTO;
 import gr.aueb.cf.restaurants.dto.RestaurantUpdateDTO;
+import gr.aueb.cf.restaurants.mapper.ReservationMapper;
+import gr.aueb.cf.restaurants.mapper.RestaurantMapper;
 import gr.aueb.cf.restaurants.model.Restaurant;
 import gr.aueb.cf.restaurants.service.IRestaurantService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
@@ -25,52 +27,55 @@ import java.util.Objects;
 public class RestaurantApiController {
 
     private final IRestaurantService restaurantService;
+    private final RestaurantMapper restaurantResponseMapper;
+    private final ReservationMapper reservationMapper;
 
     @GetMapping("/restaurants/{id}")
-    public ResponseEntity<RestaurantReadOnlyDTO> getRestaurant(@PathVariable("id") Long restaurantId) {
+    public ResponseEntity<RestaurantResponseDTO> getRestaurant(@PathVariable("id") Long restaurantId) {
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
 
         if (restaurant == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        RestaurantReadOnlyDTO restaurantReadOnlyDto = convertToReadOnlyDto(restaurant);
-        return new ResponseEntity<>(restaurantReadOnlyDto, HttpStatus.OK);
+        RestaurantResponseDTO restaurantResponseDto = restaurantResponseMapper.toResponseDto(restaurant);
+        return new ResponseEntity<>(restaurantResponseDto, HttpStatus.OK);
     }
 
     @GetMapping("/restaurants")
-    public ResponseEntity<List<RestaurantReadOnlyDTO>> getRestaurantsInCity(@PathParam("city") String city) {
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantsInCity(@PathParam("city") String city) {
         List<Restaurant> restaurants = restaurantService.getRestaurantByCity(city);
 
         if (restaurants.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<RestaurantReadOnlyDTO> restaurantsReadOnlyDto = new ArrayList<>();
+        List<RestaurantResponseDTO> restaurantsReadOnlyDto = new ArrayList<>();
         for (Restaurant restaurant : restaurants) {
-            restaurantsReadOnlyDto.add(convertToReadOnlyDto(restaurant));
+            restaurantsReadOnlyDto.add(restaurantResponseMapper.toResponseDto(restaurant));
         }
         return new ResponseEntity<>(restaurantsReadOnlyDto, HttpStatus.OK);
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<RestaurantReadOnlyDTO> addRestaurant(
+    public ResponseEntity<RestaurantResponseDTO> addRestaurant(
             @RequestBody RestaurantInsertDTO restaurantInsertDTO,
             BindingResult bindingResult) {
 
         try {
             Restaurant restaurant = restaurantService.insertRestaurant(restaurantInsertDTO);
-            RestaurantReadOnlyDTO restaurantReadOnlyDto = convertToReadOnlyDto(restaurant);
+            RestaurantResponseDTO restaurantResponseDto = restaurantResponseMapper.toResponseDto(restaurant);
+
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(restaurantReadOnlyDto.getRestaurantId())
+                    .buildAndExpand(restaurantResponseDto.getRestaurantId())
                     .toUri();
-            return ResponseEntity.created(location).body(restaurantReadOnlyDto);
+            return ResponseEntity.created(location).body(restaurantResponseDto);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping("restaurants/{id}")
-    public ResponseEntity<RestaurantReadOnlyDTO> updateRestaurant(
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
             @PathVariable("id") Long id,
             @RequestBody RestaurantUpdateDTO updateDTO,
             BindingResult bindingResult) {
@@ -81,7 +86,7 @@ public class RestaurantApiController {
 
         try {
             Restaurant restaurant = restaurantService.updateRestaurant(updateDTO);
-            RestaurantReadOnlyDTO dto = convertToReadOnlyDto(restaurant);
+            RestaurantResponseDTO dto = restaurantResponseMapper.toResponseDto(restaurant);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -89,28 +94,15 @@ public class RestaurantApiController {
     }
 
     @DeleteMapping("/restaurants/{id}")
-    public ResponseEntity<RestaurantReadOnlyDTO> deleteRestaurant(@PathVariable("id") Long id) {
+    public ResponseEntity<RestaurantResponseDTO> deleteRestaurant(@PathVariable("id") Long id) {
         Restaurant restaurant;
 
         try {
             restaurant = restaurantService.deleteRestaurantById(id);
-            RestaurantReadOnlyDTO dto = convertToReadOnlyDto(restaurant);
+            RestaurantResponseDTO dto = restaurantResponseMapper.toResponseDto(restaurant);
             return new ResponseEntity<>(dto, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    private RestaurantReadOnlyDTO convertToReadOnlyDto(Restaurant restaurant) {
-        return new RestaurantReadOnlyDTO(
-                restaurant.getRestaurantId(),
-                restaurant.getName(),
-                restaurant.getAddress(),
-                restaurant.getContactNumber(),
-                restaurant.getCityName(),
-                restaurant.getMenuDescription(),
-                restaurant.getOpenHour(),
-                restaurant.getCloseHour()
-        );
     }
 }

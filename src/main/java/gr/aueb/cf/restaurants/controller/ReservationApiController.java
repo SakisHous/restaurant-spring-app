@@ -2,7 +2,8 @@ package gr.aueb.cf.restaurants.controller;
 
 
 import gr.aueb.cf.restaurants.dto.ReservationInsertDTO;
-import gr.aueb.cf.restaurants.dto.ReservationReadOnlyDTO;
+import gr.aueb.cf.restaurants.dto.ReservationResponseDTO;
+import gr.aueb.cf.restaurants.mapper.ReservationMapper;
 import gr.aueb.cf.restaurants.model.Reservation;
 import gr.aueb.cf.restaurants.service.IReservationService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
@@ -26,9 +27,10 @@ import java.util.List;
 public class ReservationApiController {
 
     private final IReservationService reservationService;
+    private final ReservationMapper reservationMapper;
 
     @GetMapping(path = "/reservations")
-    public ResponseEntity<List<ReservationReadOnlyDTO>> getReservations() {
+    public ResponseEntity<List<ReservationResponseDTO>> getReservations() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -39,9 +41,9 @@ public class ReservationApiController {
 
         try {
             List<Reservation> reservations = reservationService.getReservationsByUsername(username);
-            List<ReservationReadOnlyDTO> reservationsReadOnlyDTOs = new ArrayList<>();
+            List<ReservationResponseDTO> reservationsReadOnlyDTOs = new ArrayList<>();
             for (Reservation reservation : reservations) {
-                reservationsReadOnlyDTOs.add(convertToReadOnly(reservation));
+                reservationsReadOnlyDTOs.add(reservationMapper.toReservationResponse(reservation));
             }
             return new ResponseEntity<>(reservationsReadOnlyDTOs, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
@@ -50,7 +52,7 @@ public class ReservationApiController {
     }
 
     @PostMapping(path = "/restaurants/{id}/reservation")
-    public ResponseEntity<ReservationReadOnlyDTO> insertReservation(
+    public ResponseEntity<ReservationResponseDTO> insertReservation(
             @PathVariable("id") Long id,
             @RequestBody ReservationInsertDTO dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -63,26 +65,26 @@ public class ReservationApiController {
 
         try {
             Reservation reservation = reservationService.insertReservation(dto);
-            ReservationReadOnlyDTO reservationReadOnlyDTO = convertToReadOnly(reservation);
+            ReservationResponseDTO reservationResponseDTO = reservationMapper.toReservationResponse(reservation);
 
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/reservations")
                     .buildAndExpand()
                     .toUri();
 
-            return ResponseEntity.created(location).body(reservationReadOnlyDTO);
+            return ResponseEntity.created(location).body(reservationResponseDTO);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    private ReservationReadOnlyDTO convertToReadOnly(Reservation reservation) {
+    private ReservationResponseDTO convertToReadOnly(Reservation reservation) {
         // get date
         String pattern = "MM-dd-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(reservation.getReservationDate());
 
-        return new ReservationReadOnlyDTO(
+        return new ReservationResponseDTO(
                 reservation.getRestaurant().getName(),
                 date,
                 reservation.getStatus().name(),

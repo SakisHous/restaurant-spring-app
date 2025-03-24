@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationReadOnlyDTO {
+public class ReservationResponseDTO {
     private String restaurantName;
     private String reservationDate;
     private String status;
