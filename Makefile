@@ -1,5 +1,3 @@
-include .env
-
 DATABASE_NAME ?= mysql-db
 MYSQL_DATABASE ?= restaurant-db
 MYSQL_ROOT_PASSWORD ?= secretPwd123!

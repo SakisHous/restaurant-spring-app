@@ -9,7 +9,7 @@ import org.mapstruct.MappingConstants;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ReservationMapper {
 
-    @Mapping(source = "restaurantName", target = "reservation.getRestaurant().getName()")
-    @Mapping(source = "reservationDate", target = "reservation.getReservationDate()", dateFormat = "MM-dd-yyyy")
+    @Mapping(source = "restaurant.name", target = "restaurantName")
+    @Mapping(source = "reservation.reservationDate", target = "reservationDate", dateFormat = "MM-dd-yyyy")
     ReservationResponseDTO toReservationResponse(Reservation reservation);
 }
