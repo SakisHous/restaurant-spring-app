@@ -11,5 +11,5 @@ public class ReservationResponseDTO {
     private String restaurantName;
     private String reservationDate;
     private String status;
-    private Long partySize;
+    private Integer partySize;
 }
