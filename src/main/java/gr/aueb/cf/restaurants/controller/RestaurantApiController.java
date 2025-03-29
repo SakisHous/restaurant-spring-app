@@ -8,6 +8,13 @@ import gr.aueb.cf.restaurants.mapper.RestaurantMapper;
 import gr.aueb.cf.restaurants.model.Restaurant;
 import gr.aueb.cf.restaurants.service.IRestaurantService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Tag(name = "1. Restaurant API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -30,8 +38,26 @@ public class RestaurantApiController {
     private final RestaurantMapper restaurantResponseMapper;
     private final ReservationMapper reservationMapper;
 
+    @Operation(summary = "Fetches restaurant by id")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Restaurant successfully found",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema =  @Schema(
+                            type = "object",
+                            ref = "#/components/schemas/RestaurantResponseDTO"))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "404", description = "Restaurant not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("/restaurants/{id}")
     public ResponseEntity<RestaurantResponseDTO> getRestaurant(@PathVariable("id") Long restaurantId) {
+
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
 
         if (restaurant == null) {
@@ -41,8 +67,25 @@ public class RestaurantApiController {
         return new ResponseEntity<>(restaurantResponseDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Fetches all the restaurants")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Restaurants successfully found",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        array = @ArraySchema(schema = @Schema(
+                                type = "object",
+                                ref = "#/components/schemas/RestaurantResponseDTO")))
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping("/restaurants")
     public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantsInCity(@PathParam("city") String city) {
+
         List<Restaurant> restaurants = restaurantService.getRestaurantByCity(city);
 
         if (restaurants.isEmpty()) {
@@ -55,10 +98,25 @@ public class RestaurantApiController {
         return new ResponseEntity<>(restaurantsReadOnlyDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Inserts new restaurant")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "201",
+                description = "Restaurant successfully created",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(
+                            type = "object",
+                            ref = "#/components/schemas/RestaurantResponseDTO"))
+                }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PostMapping("/restaurants")
-    public ResponseEntity<RestaurantResponseDTO> addRestaurant(
-            @RequestBody RestaurantInsertDTO restaurantInsertDTO,
-            BindingResult bindingResult) {
+    public ResponseEntity<RestaurantResponseDTO> addRestaurant(@RequestBody RestaurantInsertDTO restaurantInsertDTO,
+                                                               BindingResult bindingResult) {
 
         try {
             Restaurant restaurant = restaurantService.insertRestaurant(restaurantInsertDTO);
@@ -74,11 +132,26 @@ public class RestaurantApiController {
         }
     }
 
+    @Operation(summary = "Update restaurant info")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Restaurant successfully updated",
+                content =
+                    @Content(
+                        mediaType = "application/json",
+                        schema =  @Schema(
+                            type = "object",
+                            ref = "#/components/schemas/RestaurantResponseDTO"))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "404", description = "Restaurant not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PutMapping("restaurants/{id}")
-    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
-            @PathVariable("id") Long id,
-            @RequestBody RestaurantUpdateDTO updateDTO,
-            BindingResult bindingResult) {
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(@PathVariable("id") Long id,
+                                                                  @RequestBody RestaurantUpdateDTO updateDTO,
+                                                                  BindingResult bindingResult) {
 
         if (!Objects.equals(updateDTO.getRestaurantId(), id)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -93,8 +166,25 @@ public class RestaurantApiController {
         }
     }
 
+    @Operation(summary = "Delete restaurant")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Restaurant successfully deleted",
+                content =
+                @Content(
+                    mediaType = "application/json",
+                    schema =  @Schema(
+                        type = "object",
+                        ref = "#/components/schemas/RestaurantResponseDTO"))),
+            @ApiResponse(responseCode = "401", description = "Unauthenticated user"),
+            @ApiResponse(responseCode = "404", description = "Restaurant not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @DeleteMapping("/restaurants/{id}")
     public ResponseEntity<RestaurantResponseDTO> deleteRestaurant(@PathVariable("id") Long id) {
+
         Restaurant restaurant;
 
         try {

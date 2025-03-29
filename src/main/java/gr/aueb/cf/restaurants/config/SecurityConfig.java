@@ -34,9 +34,15 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/api/v1/auth/authenticate").permitAll()
-                .antMatchers("/api/v1/auth/register").permitAll()
-                .antMatchers("/api/restaurants").permitAll()
+                .requestMatchers().permitAll()
+                .antMatchers(
+                        "/api/v1/auth/authenticate",
+                        "/api/v1/auth/register",
+                        "/api/restaurants",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**"
+                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .authenticationProvider(authenticationProvider);
