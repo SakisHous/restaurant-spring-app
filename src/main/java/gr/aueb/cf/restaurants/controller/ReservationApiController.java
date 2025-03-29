@@ -7,6 +7,13 @@ import gr.aueb.cf.restaurants.mapper.ReservationMapper;
 import gr.aueb.cf.restaurants.model.Reservation;
 import gr.aueb.cf.restaurants.service.IReservationService;
 import gr.aueb.cf.restaurants.service.exceptions.EntityNotFoundException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Tag(name = "4. Reservation API")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -29,8 +37,28 @@ public class ReservationApiController {
     private final IReservationService reservationService;
     private final ReservationMapper reservationMapper;
 
+    @Operation(summary = "Fetches all reservations for a customer.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "Reservations successfully retrieved",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        array =  @ArraySchema(
+                            schema = @Schema(
+                                type = "object",
+                                ref = "#/components/schemas/ReservationResponseDTO"))
+                    )
+            }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "404", description = "Reservations not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @GetMapping(path = "/reservations")
     public ResponseEntity<List<ReservationResponseDTO>> getReservations() {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -51,10 +79,27 @@ public class ReservationApiController {
         }
     }
 
+    @Operation(summary = "Creates a reservation for a restaurant with this Id.")
+    @ApiResponses(
+        value = {
+            @ApiResponse(
+                responseCode = "201",
+                description = "Reservation successfully created.",
+                content = {
+                    @Content(
+                        mediaType = "application/json",
+                        schema = @Schema(
+                                type = "object",
+                                ref = "#/components/schemas/ReservationResponseDTO"))
+                }),
+            @ApiResponse(responseCode = "401", description = "Unauthorized user"),
+            @ApiResponse(responseCode = "404", description = "Restaurant not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+    })
     @PostMapping(path = "/restaurants/{id}/reservation")
-    public ResponseEntity<ReservationResponseDTO> insertReservation(
-            @PathVariable("id") Long id,
-            @RequestBody ReservationInsertDTO dto) {
+    public ResponseEntity<ReservationResponseDTO> insertReservation(@PathVariable("id") Long id,
+                                                                    @RequestBody ReservationInsertDTO dto) {
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
