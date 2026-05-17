@@ -1,0 +1,6 @@
+# Ignore dependencies
+node_modules/
+.angular/
+
+# Ignore local build outputs
+dist/

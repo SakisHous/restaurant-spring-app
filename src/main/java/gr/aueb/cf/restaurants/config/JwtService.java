@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JWTService {
+public class JwtService {
 
     @Value(value = "${jwt.secret.key}")
     private String SECRET_KEY;

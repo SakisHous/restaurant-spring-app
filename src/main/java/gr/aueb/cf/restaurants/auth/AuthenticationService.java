@@ -1,6 +1,6 @@
 package gr.aueb.cf.restaurants.auth;
 
-import gr.aueb.cf.restaurants.config.JWTService;
+import gr.aueb.cf.restaurants.config.JwtService;
 import gr.aueb.cf.restaurants.dto.RegisterUserDTO;
 import gr.aueb.cf.restaurants.model.Role;
 import gr.aueb.cf.restaurants.model.User;
@@ -17,7 +17,7 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JWTService jwtService;
+    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterUserDTO request) {
