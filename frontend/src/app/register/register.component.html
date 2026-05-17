@@ -1,0 +1,52 @@
+<form [formGroup]="form" class="registered-form">
+  <h2>{{ title }}</h2>
+  <!-- Username -->
+  <mat-form-field appearance="outline">
+    <mat-label for="username">Username</mat-label>
+    <input type="text" name="username" matInput placeholder="Enter username" formControlName="username">
+    <mat-hint *ngIf="form.get('username')?.invalid && form.get('username')?.touched">Username is required</mat-hint>
+  </mat-form-field>
+  <!-- Password -->
+  <mat-form-field appearance="outline">
+    <mat-label for="password">Password</mat-label>
+    <input type="password" name="password" matInput placeholder="Enter password" formControlName="password">
+    <mat-hint *ngIf="form.get('password')?.invalid && form.get('password')?.touched">Username is required</mat-hint>
+  </mat-form-field>
+  <!-- Confirm Password -->
+  <mat-form-field appearance="outline">
+    <mat-label for="confirmPassword">Confirm Password</mat-label>
+    <input type="password" name="confirmPassword" matInput placeholder="Confirm password" formControlName="confirmPassword">
+    <mat-hint *ngIf="form.get('confirmPassword')?.invalid && form.get('confirmPassword')?.touched">Confirm password is required</mat-hint>
+  </mat-form-field>
+  <!-- Firstname -->
+  <mat-form-field appearance="outline">
+    <mat-label for="firstname">Firstname</mat-label>
+    <input type="text" name="firstname" matInput placeholder="Firstname" formControlName="firstname">
+    <mat-hint *ngIf="form.get('firstname')?.invalid && form.get('firstname')?.touched">Firstname is required</mat-hint>
+  </mat-form-field>
+  <!-- Lastname -->
+  <mat-form-field appearance="outline">
+    <mat-label for="lastname">Lastname</mat-label>
+    <input type="text" name="lastname" matInput placeholder="Lastname" formControlName="lastname">
+    <mat-hint *ngIf="form.get('lastname')?.invalid && form.get('lastname')?.touched">Lastname is required</mat-hint>
+  </mat-form-field>
+  <!-- Phone Number -->
+  <mat-form-field appearance="outline">
+    <mat-label for="phoneNumber">Phone Number</mat-label>
+    <input type="text" name="phoneNumber" matInput placeholder="Phone Number" formControlName="phoneNumber">
+    <mat-hint *ngIf="form.get('phoneNumber')?.invalid && form.get('phoneNumber')?.touched">Phone Number is required</mat-hint>
+  </mat-form-field>
+  <!-- Email -->
+  <mat-form-field appearance="outline">
+    <mat-label for="email">Email</mat-label>
+    <input type="text" name="email" matInput placeholder="Email" formControlName="email">
+    <mat-hint *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Email is required</mat-hint>
+  </mat-form-field>
+  <!-- Submit -->
+  <div class="submit-btn">
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">Submit</button>
+  </div>
+  <div>
+    Do you have an account? Please <button mat-raised-button color="primary" routerLink="/login">Login In</button>
+  </div>
+</form>

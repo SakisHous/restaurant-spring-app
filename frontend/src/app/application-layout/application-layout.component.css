@@ -1,0 +1,25 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Set the wrapper to at least the height of the viewport */
+}
+
+.content {
+  flex: 1; /* Allow content to grow and take up remaining space */
+}
+
+.social-icon {
+  margin-right: 1rem; /* Adjust spacing as needed */
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px; /* Adjust height as needed */
+  background-color: #f0f0f0; /* Set background color as needed */
+}

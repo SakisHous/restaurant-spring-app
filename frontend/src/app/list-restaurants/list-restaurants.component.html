@@ -1,0 +1,24 @@
+<mat-grid-list cols="3" gutterSize="16px">
+  <h2 class="title">Restaurants in {{ cityInput }}</h2>
+  <mat-grid-tile *ngFor="let restaurant of restaurants">
+    <mat-card class="restaurant-card">
+      <mat-card-header>
+        <mat-card-title>{{ restaurant.name }}</mat-card-title>
+      </mat-card-header>
+      <img mat-card-image class="center-image" width="300px" src="https://cdn.pixabay.com/photo/2016/11/21/16/02/outdoor-dining-1846137_1280.jpg" alt="Test photo">
+      <mat-card-content>
+        <p>
+          <strong>Opens at:</strong> {{ restaurant.openHour }}<br>
+          <strong>Closes at:</strong> {{ restaurant.closeHour }}<br>
+          <strong>Address:</strong> {{ restaurant.address }}<br>
+          <strong>Menu Description:</strong> {{ restaurant.menuDescription }}<br>
+          <strong>Contact Number:</strong> {{ restaurant.contactNumber }}<br>
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button [routerLink]="['/restaurants/', restaurant.restaurantId, 'reservation']">Reservation</button>
+        <button mat-button (click)="sendRestaurantDetails(restaurant)" [routerLink]="['/restaurants/', restaurant.restaurantId, 'review']">Review</button>
+      </mat-card-actions>
+    </mat-card>
+  </mat-grid-tile>
+</mat-grid-list>

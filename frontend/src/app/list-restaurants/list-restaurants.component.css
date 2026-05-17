@@ -1,0 +1,22 @@
+.mat-grid-list {
+  margin: 30px;
+}
+
+.title {
+  text-align: center;
+}
+
+.mat-grid-list {
+  margin-top: 10px;
+  margin-bottom: 170px;
+}
+
+.restaurant-card {
+  max-width: 300px;
+}
+
+.center-image {
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+}

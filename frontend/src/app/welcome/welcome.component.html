@@ -1,0 +1,9 @@
+<div class="container">
+  <h2 class="title">Search for restaurants in your city</h2>
+    <mat-form-field class="city-form">
+    <div class="search-container">
+      <input matInput [(ngModel)]="cityInput" placeholder="Search" (keydown.enter)="onSubmit()">
+      <button type="submit" (click)="onSubmit()" mat-button class="search-button"><mat-icon>search</mat-icon></button>
+    </div>
+  </mat-form-field> 
+</div>

@@ -1,0 +1,14 @@
+.login-form {
+  width: 500px; 
+  margin: 40px auto;
+  text-align: center;
+  min-height: fit-content;
+}
+
+mat-form-field {
+  width: 400px; /* Adjust the width as needed */
+}
+
+.submit-btn {
+  margin-bottom: 40px;
+}

@@ -1,0 +1,32 @@
+<div class="reservation-table">
+  <h2>Reservations</h2>
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Restaurant Column -->
+    <ng-container matColumnDef="restaurantName">
+      <th mat-header-cell *matHeaderCellDef> Restaurant </th>
+      <td mat-cell *matCellDef="let element"> {{ element.restaurantName }} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="reservationDate">
+      <th mat-header-cell *matHeaderCellDef> Reservation Date </th>
+      <td mat-cell *matCellDef="let element"> {{ element.reservationDate }} </td>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{ element.status }} </td>
+    </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="partySize">
+        <th mat-header-cell *matHeaderCellDef> Party Size </th>
+        <td mat-cell *matCellDef="let element"> {{ element.partySize }} </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

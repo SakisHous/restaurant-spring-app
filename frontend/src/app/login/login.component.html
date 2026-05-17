@@ -1,0 +1,22 @@
+<form [formGroup]="form" class="login-form">
+  <h2>{{ title }}</h2>
+  <!-- Username -->
+  <mat-form-field appearance="outline">
+    <mat-label for="username">Username</mat-label>
+    <input type="text" name="username" matInput placeholder="Enter username" formControlName="username">
+    <mat-hint *ngIf="form.get('username')?.invalid && form.get('username')?.touched">Username is required</mat-hint>
+  </mat-form-field>
+  <!-- Password -->
+  <mat-form-field appearance="outline">
+    <mat-label for="password">Password</mat-label>
+    <input type="password" name="password" matInput placeholder="Enter password" formControlName="password">
+    <mat-hint *ngIf="form.get('password')?.invalid && form.get('password')?.touched">Password is required</mat-hint>
+  </mat-form-field>
+  <!-- Submit -->
+  <div class="submit-btn">
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!form.valid">Log in</button>
+  </div>
+  <div>
+    You do not have an account? Please <button mat-raised-button color="primary" routerLink="/register">Register</button>
+  </div>
+</form>
